@@ -96,7 +96,7 @@
 	}
 
 	//the magic
-	function animate() {
+	function render() {
 		requestAnimationFrame(render);
 		
 		analyser.getByteFrequencyData(frequencyData);
