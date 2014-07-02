@@ -1,15 +1,14 @@
-/*global $, THREE, audioHelper, webGLHelper, Uint8Array, requestAnimationFrame*/
+/*global $, THREE, AudioHelper, WebGLHelper, Uint8Array, requestAnimationFrame*/
 (function () {
     "use strict";
 	//define static 3D scene
 	var scene = new THREE.Scene(),
 	    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1E-1, 1E3),
 	    renderer = new THREE.WebGLRenderer(),
-        
         //define audio analyser/frequency array
-        analyser = audioHelper.init(512),
-        frequencyData = new Uint8Array(analyser.frequencyBinCount),
-        barArray = webGLHelper.createFrequencyBars(analyser.frequencyBinCount);
+        analyser = AudioHelper.init(512),
+        frequencyArray = new Uint8Array(analyser.frequencyBinCount),
+        barArray = new WebGLHelper.generateBars(analyser.frequencyBinCount);
     
     //compose scene
 	scene.add(new THREE.AmbientLight(0x00dd00));
@@ -28,10 +27,10 @@
 	function render() {
 		requestAnimationFrame(render);
 		
-		analyser.getByteFrequencyData(frequencyData);
+		analyser.getByteFrequencyData(frequencyArray);
 		
-		$.each(barArray, function setFrequencyScale(i, el) {
-			el.scale.x = frequencyData[i] / 8;
+		$.each(barArray, function setBarScale(i, el) {
+			el.scale.x = frequencyArray[i] / 8;
 		});
 		
 		renderer.render(scene, camera);

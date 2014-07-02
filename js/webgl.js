@@ -1,16 +1,18 @@
 //Helper functions for WebGL
 /*global THREE*/
-var webGLHelper = {
+var WebGLHelper = {
+    
     //return new cube mesh according to params
     // size: cube height/width/length
     // color: hex color value
-    // returns: cube mesh object
-    createCubeMesh: function (size, color) {
+    // returns: cube mesh object    
+    _createCubeMesh: function (size, color) {
         "use strict";
         var geoCube = new THREE.BoxGeometry(size, size, size),
             matCube = new THREE.MeshLambertMaterial({color: color});
         return new THREE.Mesh(geoCube, matCube);
     },
+    
     //create and position bars representing audio frequency waveform
     // count: amount of bars to create (should be seeded by analyser frequency interval count)
     // returns: array containing Three.js meshes
@@ -22,7 +24,7 @@ var webGLHelper = {
             cube,
             i;
         for (i = 0; i < count; i += 1) {
-            cube = this.createCubeMesh(8E-2, "0xffffff");
+            cube = this._createCubeMesh(8E-2, "0xffffff");
             interval = i / count;
             
             //position in a circle        

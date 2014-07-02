@@ -1,9 +1,9 @@
-/*global AudioContext, webkitAudioContext*/
+/*global $, AudioContext, webkitAudioContext*/
 //creates audio analyser, binds to audio element
 // fft: fftSize for the audio analser (MUST BE A POWER OF TWO)
 // returns: analyser object
-var audioHelper = {
-        init: function (fft) {
+var AudioHelper =  {
+        init: function initializeAudioAnalyser(fft) {
             "use strict";
             //create audio context
             var context, analyser, src;
