@@ -8,7 +8,7 @@
         //define audio analyser/frequency array
         analyser = AudioHelper.init(512),
         frequencyArray = new Uint8Array(analyser.frequencyBinCount),
-        barArray = new WebGLHelper.generateBars(analyser.frequencyBinCount);
+        barArray = WebGLHelper.createBars(analyser.frequencyBinCount);
     
     //compose scene
 	scene.add(new THREE.AmbientLight(0x00dd00));
