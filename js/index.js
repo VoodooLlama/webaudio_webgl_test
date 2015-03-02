@@ -2,9 +2,9 @@
 (function () {
     "use strict";
 	//define static 3D scene
-	var scene = new THREE.Scene(),
-	    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1E-1, 1E3),
-	    renderer = new THREE.WebGLRenderer(),
+    var scene = new THREE.Scene(),
+        camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1E-1, 1E3),
+        renderer = new THREE.WebGLRenderer(),
         //initialize audio analyser
         analyser = AudioHelper.init(512);
 
@@ -27,7 +27,7 @@
     camera.position.z = 10;
 
 	//inject canvas
-	renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(window.innerWidth, window.innerHeight);
     try {
         document.body.appendChild(renderer.domElement);
     }
@@ -37,7 +37,7 @@
     }
 
 
-	//the magic
+    //the magic
     function render() {
         requestAnimationFrame(render);
 
