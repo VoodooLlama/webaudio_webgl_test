@@ -6,8 +6,15 @@
 	    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1E-1, 1E3),
 	    renderer = new THREE.WebGLRenderer(),
         //define audio analyser/frequency array
-        analyser = AudioHelper.init(512),
-        frequencyArray = new Uint8Array(analyser.frequencyBinCount),
+        analyser = AudioHelper.init(512);
+
+    if(analyser === null)
+    {
+        console.warn('Error initializing Web Audio API!');
+        return;
+    }
+
+    var frequencyArray = new Uint8Array(analyser.frequencyBinCount),
         barArray = WebGLHelper.createBars(analyser.frequencyBinCount);
     
     //compose scene
@@ -19,22 +26,26 @@
 	camera.position.z = 10;
 
 	//inject canvas
-	renderer.setSize(window.innerWidth - 100, window.innerHeight - 100);
-	document.body.appendChild(renderer.domElement);
-	
+	renderer.setSize(window.innerWidth, window.innerHeight);
+    try {
+        document.body.appendChild(renderer.domElement);
+    }
+    catch(e) {
+        console.warn('Error initializing WebGL canvas!');
+        return;
+    }
+
+
 	//the magic
 	function render() {
         requestAnimationFrame(render);
 
         analyser.getByteFrequencyData(frequencyArray);
-		
+
+        //scale bars according to frequency analyser
 		$.each(barArray, function setBarScale(i, el) {
-			el.scale.x = frequencyArray[i] / 8;
             //fix to avoid console warnings from a scale of 0
-            if(el.scale.x <= 0)
-            {
-                el.scale.x = 0.01;
-            }
+            el.scale.x = (frequencyArray[i] +.01) / 8;
 		});
 		
 		renderer.render(scene, camera);

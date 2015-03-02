@@ -1,7 +1,7 @@
 /*global $, AudioContext, webkitAudioContext*/
 //creates audio analyser, binds to audio element
 // fft: fftSize for the audio analyser (MUST BE A POWER OF TWO)
-// returns: analyser object
+// returns: analyser object connected to context media
 var AudioHelper =  {
         init: function initializeAudioAnalyser(fft) {
             "use strict";
@@ -19,9 +19,10 @@ var AudioHelper =  {
             analyser = context.createAnalyser();
             analyser.fftSize = fft;
 
+            //inject audio element
             $( "<audio></audio>", {
                 "class": "audio",
-                "controls": "controls",
+                "autoplay": true,
                 "src": "http://javanese.imslp.info/files/imglnks/usimg/6/69/IMSLP74221-PMLP04611-pachelbel_canonind.mp3",
                 canplay: function bindAudioSource( event ) {
                     src = context.createMediaElementSource(this);
