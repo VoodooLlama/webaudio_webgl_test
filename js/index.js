@@ -5,7 +5,7 @@
 	var scene = new THREE.Scene(),
 	    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1E-1, 1E3),
 	    renderer = new THREE.WebGLRenderer(),
-        //define audio analyser/frequency array
+        //initialize audio analyser
         analyser = AudioHelper.init(512);
 
     if(analyser === null)
@@ -14,16 +14,17 @@
         return;
     }
 
+    //define frequency array, create 3D bars
     var frequencyArray = new Uint8Array(analyser.frequencyBinCount),
         barArray = WebGLHelper.createBars(analyser.frequencyBinCount);
     
     //compose scene
-	scene.add(new THREE.AmbientLight(0x00dd00));
+    scene.add(new THREE.AmbientLight(0x00dd00));
     $.each(barArray, function (i, el) {
 		scene.add(el);
-	});
+    });
     
-	camera.position.z = 10;
+    camera.position.z = 10;
 
 	//inject canvas
 	renderer.setSize(window.innerWidth, window.innerHeight);
@@ -37,19 +38,19 @@
 
 
 	//the magic
-	function render() {
+    function render() {
         requestAnimationFrame(render);
 
         analyser.getByteFrequencyData(frequencyArray);
 
         //scale bars according to frequency analyser
-		$.each(barArray, function setBarScale(i, el) {
+        $.each(barArray, function setBarScale(i, el) {
             //fix to avoid console warnings from a scale of 0
             el.scale.x = (frequencyArray[i] +.01) / 8;
-		});
+        });
 		
-		renderer.render(scene, camera);
-	}
+        renderer.render(scene, camera);
+    }
     
     render();
 }());
