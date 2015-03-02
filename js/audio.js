@@ -1,6 +1,6 @@
 /*global $, AudioContext, webkitAudioContext*/
 //creates audio analyser, binds to audio element
-// fft: fftSize for the audio analser (MUST BE A POWER OF TWO)
+// fft: fftSize for the audio analyser (MUST BE A POWER OF TWO)
 // returns: analyser object
 var AudioHelper =  {
         init: function initializeAudioAnalyser(fft) {
@@ -19,12 +19,17 @@ var AudioHelper =  {
             analyser = context.createAnalyser();
             analyser.fftSize = fft;
 
-            //add event listener to analyser which connects to the source when ready to play
-            $("audio").bind('canplay', function bindAudioSource() {
-                src = context.createMediaElementSource(this);
-                src.connect(analyser);
-                analyser.connect(context.destination);
-            });
+            $( "<audio></audio>", {
+                "class": "audio",
+                "controls": "controls",
+                "src": "http://javanese.imslp.info/files/imglnks/usimg/6/69/IMSLP74221-PMLP04611-pachelbel_canonind.mp3",
+                canplay: function bindAudioSource( event ) {
+                    src = context.createMediaElementSource(this);
+                    src.connect(analyser);
+                    analyser.connect(context.destination);
+                }
+            })
+            .appendTo( "body" );
 
             return analyser;
         }

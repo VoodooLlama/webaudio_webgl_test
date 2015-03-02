@@ -13,7 +13,6 @@
     //compose scene
 	scene.add(new THREE.AmbientLight(0x00dd00));
     $.each(barArray, function (i, el) {
-        //alert(el.position.x);
 		scene.add(el);
 	});
     
@@ -25,12 +24,17 @@
 	
 	//the magic
 	function render() {
-		requestAnimationFrame(render);
-		
-		analyser.getByteFrequencyData(frequencyArray);
+        requestAnimationFrame(render);
+
+        analyser.getByteFrequencyData(frequencyArray);
 		
 		$.each(barArray, function setBarScale(i, el) {
 			el.scale.x = frequencyArray[i] / 8;
+            //fix to avoid console warnings from a scale of 0
+            if(el.scale.x <= 0)
+            {
+                el.scale.x = 0.01;
+            }
 		});
 		
 		renderer.render(scene, camera);
