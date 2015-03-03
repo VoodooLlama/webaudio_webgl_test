@@ -7,16 +7,21 @@ var WebGLHelper = (function () {
         aspect: window.innerWidth / window.innerHeight,
         near: 1E-1,
         far: 1E3,
-        positionZ: 10
+        positionZ: 10,
+        cubeColor: 0xffffff
     };
+    var cubeSettings = {
+        size: 8E-2,
+        color: "0xffffff"
+    }
 
     //return new cube mesh according to params
     // size: cube height/width/length
     // color: hex color value
     // returns: cube mesh object    
-    function _createCubeMesh(size, color) {
-        var geoCube = new THREE.BoxGeometry(size, size, size),
-            matCube = new THREE.MeshLambertMaterial({color: color});
+    function _createCubeMesh() {
+        var geoCube = new THREE.BoxGeometry(cubeSettings.size, cubeSettings.size, cubeSettings.size),
+            matCube = new THREE.MeshPhongMaterial({color: cubeSettings.color});
         return new THREE.Mesh(geoCube, matCube);
     }
     
@@ -30,7 +35,7 @@ var WebGLHelper = (function () {
             cube,
             i = 0;
         while (++i <= count) {
-            cube = _createCubeMesh(8E-2, "0xffffff");
+            cube = _createCubeMesh();
             interval = i / count;
             
             //position in a circle        

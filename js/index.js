@@ -12,15 +12,17 @@
         {
             return;
         }
-        var frequencyArray = new Uint8Array(analyser.frequencyBinCount),
-        barArray = WebGLHelper.createBars(analyser.frequencyBinCount),
-        i = 0;
+
+    var frequencyArray = new Uint8Array(analyser.frequencyBinCount),
+        barArray = WebGLHelper.createBars(analyser.frequencyBinCount);
     
     //prepare scene
-    scene.add(new THREE.AmbientLight(0x00dd00));
-    while (++i < barArray.length) {
-        scene.add(barArray[i]);
-    }
+    scene.add(new THREE.AmbientLight(0x00ff00));
+    $.each(barArray, function addBarsToScene(i, el) {
+        scene.add(el);
+    });
+
+    //position camera
     camera.position.z = settings.positionZ;
 
     //inject WebGL canvas
@@ -31,13 +33,20 @@
     catch(e) {
         console.warn('Error initializing WebGL canvas!');
     }
+
+    //set redraw method
+    $(window).on('resize', function resizeWindow()
+    {
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        camera.aspect = window.innerWidth / window.innerHeight;
+    });
     
 	//the magic
 	function render() {
 		requestAnimationFrame(render);
 		
 		analyser.getByteFrequencyData(frequencyArray);
-		
+
 		$.each(barArray, function setBarScale(i, el) {
 			el.scale.x = (frequencyArray[i] + 0.01) / 8;
 		});
