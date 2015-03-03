@@ -2,6 +2,14 @@
 /*global THREE*/
 var WebGLHelper = (function () {
     "use strict";
+    var settings = {
+        fov: 75,
+        aspect: window.innerWidth / window.innerHeight,
+        near: 1E-1,
+        far: 1E3,
+        positionZ: 10
+    };
+
     //return new cube mesh according to params
     // size: cube height/width/length
     // color: hex color value
@@ -20,8 +28,8 @@ var WebGLHelper = (function () {
             twoPI = Math.PI * 2,
             interval,
             cube,
-            i;
-        for (i = 0; i < count; i += 1) {
+            i = 0;
+        while (++i <= count) {
             cube = _createCubeMesh(8E-2, "0xffffff");
             interval = i / count;
             
@@ -37,6 +45,7 @@ var WebGLHelper = (function () {
     }
     
     return {
-        createBars: createBarArray
+        createBars: createBarArray,
+        settings: settings
     };
 })();

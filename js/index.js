@@ -1,57 +1,49 @@
 /*global $, THREE, AudioHelper, WebGLHelper, Uint8Array, requestAnimationFrame*/
 (function () {
     "use strict";
-	//define static 3D scene
+    //initialize 3d scene
     var scene = new THREE.Scene(),
-        camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1E-1, 1E3),
+        settings = WebGLHelper.settings,
+        camera = new THREE.PerspectiveCamera(settings.fov, settings.aspect, settings.near, settings.far),
         renderer = new THREE.WebGLRenderer(),
-        //initialize audio analyser
-        analyser = AudioHelper.init(512);
-
-    if(analyser === null)
-    {
-        console.warn('Error initializing Web Audio API!');
-        return;
-    }
-
-    //define frequency array, create 3D bars
-    var frequencyArray = new Uint8Array(analyser.frequencyBinCount),
-        barArray = WebGLHelper.createBars(analyser.frequencyBinCount);
+        //define audio analyser/initialize scene
+        analyser = AudioHelper.init();
+        if(analyser === null)
+        {
+            return;
+        }
+        var frequencyArray = new Uint8Array(analyser.frequencyBinCount),
+        barArray = WebGLHelper.createBars(analyser.frequencyBinCount),
+        i = 0;
     
-    //compose scene
+    //prepare scene
     scene.add(new THREE.AmbientLight(0x00dd00));
-    $.each(barArray, function (i, el) {
-		scene.add(el);
-    });
-    
-    camera.position.z = 10;
+    while (++i < barArray.length) {
+        scene.add(barArray[i]);
+    }
+    camera.position.z = settings.positionZ;
 
-	//inject canvas
+    //inject WebGL canvas
     renderer.setSize(window.innerWidth, window.innerHeight);
     try {
         document.body.appendChild(renderer.domElement);
     }
     catch(e) {
         console.warn('Error initializing WebGL canvas!');
-        return;
     }
-
-
-    //the magic
-    function render() {
-        requestAnimationFrame(render);
-
-        analyser.getByteFrequencyData(frequencyArray);
-
-        //scale bars according to frequency analyser
-        $.each(barArray, function setBarScale(i, el) {
-            //fix to avoid console warnings from a scale of 0
-            el.scale.x = (frequencyArray[i] +.01) / 8;
-        });
+    
+	//the magic
+	function render() {
+		requestAnimationFrame(render);
 		
-        renderer.render(scene, camera);
-    }
+		analyser.getByteFrequencyData(frequencyArray);
+		
+		$.each(barArray, function setBarScale(i, el) {
+			el.scale.x = (frequencyArray[i] + 0.01) / 8;
+		});
+		
+		renderer.render(scene, camera);
+	}
     
     render();
 }());
-	
