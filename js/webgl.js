@@ -1,18 +1,47 @@
 //Helper functions for WebGL
-/*global THREE*/
 var WebGLHelper = (function () {
     "use strict";
-    var settings = {
-        fov: 75,
-        aspect: window.innerWidth / window.innerHeight,
-        near: 1E-1,
-        far: 1E3,
-        positionZ: 10,
-        cubeColor: 0xffffff
-    };
-    var cubeSettings = {
-        size: 8E-2,
-        color: "0xffffff"
+    var scene = new THREE.Scene(),
+        renderer = new THREE.WebGLRenderer(),
+        settings = {
+            fov: 75,
+            aspect: window.innerWidth / window.innerHeight,
+            near: 1E-1,
+            far: 1E3,
+            positionZ: 10,
+            cubeColor: 0xffffff
+        },
+        camera = new THREE.PerspectiveCamera(settings.fov, settings.aspect, settings.near, settings.far),
+        cubeSettings = {
+            size: 8E-2,
+            color: "0xffffff"
+        };
+
+    //initialize WebGL scene
+    //returns: boolean representing whether initialization was successful
+    function initializeScene() {
+        //set up scene elements
+        scene.add(new THREE.AmbientLight(0x00ff00));
+        camera.position.z = settings.positionZ;
+
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        //attempt to inject WebGL canvas
+        try {
+            document.body.appendChild(renderer.domElement);
+        }
+        catch(e) {
+            document.write('Error initializing WebGL canvas!');
+            return false;
+        }
+
+        //resize renderer on window resize
+        $(window).on('resize', function resizeWindow()
+        {
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            camera.aspect = window.innerWidth / window.innerHeight;
+        });
+        return true;
     }
 
     //return new cube mesh according to params
@@ -46,11 +75,26 @@ var WebGLHelper = (function () {
             cube.rotation.z = twoPI * interval;
             barArray.push(cube);
         }
+        _addBarArrayToScene(barArray);
         return barArray;
+    }
+
+    //private function to add each generated bar to the scene
+    function _addBarArrayToScene(bars) {
+        $.each(bars, function addBarsToScene(i, el) {
+            scene.add(el);
+        });
+    }
+
+    //render the scene (each frame)
+    function render()
+    {
+        renderer.render(scene, camera);
     }
     
     return {
+        init: initializeScene,
         createBars: createBarArray,
-        settings: settings
+        render: render
     };
 })();
