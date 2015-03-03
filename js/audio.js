@@ -1,6 +1,4 @@
 //creates audio analyser, injects audio, binds nodes
-// fft: fftSize for the audio analyser (MUST BE A POWER OF TWO)
-// returns: analyser object
 var AudioHelper =  (function () {
     "use strict";
     var context,
@@ -11,7 +9,7 @@ var AudioHelper =  (function () {
         };
 
     //creates Web Audio API context
-    //returns: context or null if unsupported
+    // returns: context or null if unsupported
     function _createContext() {
         //create audio context
         var context;
@@ -27,7 +25,7 @@ var AudioHelper =  (function () {
     }
 
     //creates and injects audio element into body
-    //returns: Audio element
+    // returns: Audio element
     function _injectAudio() {
         //inject audio tag
         var audio = new Audio();
@@ -40,7 +38,7 @@ var AudioHelper =  (function () {
     }
 
     //sets up audio context and source, connects audio nodes
-    //returns: analyser node
+    // returns: analyser node
     function initializeAudioAnalyser() {
 
         //create audio context and analyser

@@ -15,7 +15,14 @@ QUnit.test("Create array containing bar meshes", function(assert) {
 });
 
 module("AudioHelper");
-QUnit.test("Create AudioContext analyser", function(assert) {
+QUnit.test("Create AudioContext analyser and inject Audio player", function(assert) {
     var actual = AudioHelper.init();
+    var audio = document.getElementById('audioPlayer');
+    var boolAudioInstance = audio instanceof Audio;
+    assert.ok(boolAudioInstance, "Audio successfully injected");
+    if(boolAudioInstance)
+    {
+        audio.pause();
+    }
     assert.ok(actual instanceof AnalyserNode, "Analyser is an instance of type AnalyserNode");
 });

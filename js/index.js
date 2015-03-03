@@ -1,20 +1,22 @@
 (function () {
     "use strict";
-    //define audio analyser/initialize scene
+    //define audio analyser
     var analyser = AudioHelper.init();
     if(analyser === null)
     {
         return;
     }
+    //initialize scene
     if (!WebGLHelper.init())
     {
         return;
     }
 
-    var frequencyArray = new Uint8Array(analyser.frequencyBinCount),
-        barArray = WebGLHelper.createBars(analyser.frequencyBinCount);
+    var freqBinCount = analyser.frequencyBinCount,
+        frequencyArray = new Uint8Array(freqBinCount),
+        barArray = WebGLHelper.createBars(freqBinCount);
     
-    //the magic:
+    //the magic
     function render() {
         requestAnimationFrame(render);
         //retrieve byte array containing audio frequencies

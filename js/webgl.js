@@ -1,9 +1,9 @@
-//Helper functions for WebGL
+//Helper functions to initialize and render WebGL scene elements
 var WebGLHelper = (function () {
     "use strict";
     var scene = new THREE.Scene(),
         renderer = new THREE.WebGLRenderer(),
-        settings = {
+        _settings = {
             fov: 75,
             aspect: window.innerWidth / window.innerHeight,
             near: 1E-1,
@@ -11,18 +11,18 @@ var WebGLHelper = (function () {
             positionZ: 10,
             cubeColor: 0xffffff
         },
-        camera = new THREE.PerspectiveCamera(settings.fov, settings.aspect, settings.near, settings.far),
-        cubeSettings = {
+        camera = new THREE.PerspectiveCamera(_settings.fov, _settings.aspect, _settings.near, _settings.far),
+        _cubeSettings = {
             size: 8E-2,
             color: "0xffffff"
         };
 
     //initialize WebGL scene
-    //returns: boolean representing whether initialization was successful
+    // returns: boolean representing whether initialization was successful
     function initializeScene() {
         //set up scene elements
         scene.add(new THREE.AmbientLight(0x00ff00));
-        camera.position.z = settings.positionZ;
+        camera.position.z = _settings.positionZ;
 
         renderer.setSize(window.innerWidth, window.innerHeight);
 
@@ -49,8 +49,8 @@ var WebGLHelper = (function () {
     // color: hex color value
     // returns: cube mesh object    
     function _createCubeMesh() {
-        var geoCube = new THREE.BoxGeometry(cubeSettings.size, cubeSettings.size, cubeSettings.size),
-            matCube = new THREE.MeshPhongMaterial({color: cubeSettings.color});
+        var geoCube = new THREE.BoxGeometry(_cubeSettings.size, _cubeSettings.size, _cubeSettings.size),
+            matCube = new THREE.MeshPhongMaterial({color: _cubeSettings.color});
         return new THREE.Mesh(geoCube, matCube);
     }
     
@@ -79,14 +79,14 @@ var WebGLHelper = (function () {
         return barArray;
     }
 
-    //private function to add each generated bar to the scene
+    //add each generated 3d bar to the scene
     function _addBarArrayToScene(bars) {
         $.each(bars, function addBarsToScene(i, el) {
             scene.add(el);
         });
     }
 
-    //render the scene (each frame)
+    //render the scene
     function render()
     {
         renderer.render(scene, camera);
