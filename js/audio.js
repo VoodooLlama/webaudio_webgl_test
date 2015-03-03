@@ -10,7 +10,9 @@ var AudioHelper =  (function () {
                 fftSize: 512,
                 smoothing: .8
             };
-    
+
+        //creates Web Audio API context
+        //returns: context or null if unsupported
         function _createContext() {
             //create audio context
             var context;
@@ -24,7 +26,9 @@ var AudioHelper =  (function () {
             }
             return context;
         }
-    
+
+        //creates and injects audio element into body
+        //returns: Audio element
         function _injectAudio() {
             //inject audio tag
             var audio = new Audio();
@@ -36,6 +40,8 @@ var AudioHelper =  (function () {
             return audio;
         }
 
+        //sets up audio context and source, connects audio nodes
+        //returns: analyser node
         function initializeAudioAnalyser() {
 
             //create audio context and analyser
