@@ -3,7 +3,7 @@ var AudioHelper =  (function () {
     "use strict";
     var context,
         _settings = {
-            audioSource: "http://javanese.imslp.info/files/imglnks/usimg/6/69/IMSLP74221-PMLP04611-pachelbel_canonind.mp3",
+            audioSource: "resources/pachelbel_canonind.mp3",
             fftSize: 512,
             smoothing: .8
         };
@@ -15,8 +15,6 @@ var AudioHelper =  (function () {
         var context;
         if (typeof AudioContext !== "undefined") {
             context = new AudioContext();
-        } else if (typeof webkitAudioContext !== "undefined") {
-            context = new webkitAudioContext();
         } else {
             document.write('Web Audio API not supported!');
             context = null;
